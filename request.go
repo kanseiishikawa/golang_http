@@ -8,7 +8,7 @@ import (
 
 
 func main() {
-	url := "http://13.58.72.57/apple"
+	url := "http://*******/apple"
 
 	req, err := http.NewRequest("GET", url, nil)
 
