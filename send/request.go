@@ -3,9 +3,12 @@ package main
 import (
 	"net/http"
 	"io/ioutil"
+	"io"
 	"encoding/json"
 	"fmt"
 	"os"
+	"mime/multipart"
+	"bytes"
 )
 
 type json_data struct {
@@ -15,26 +18,36 @@ type json_data struct {
 func main() {
 
 	var url = connect_url()
-	url += "/apple"
-	req, err := http.NewRequest("GET", url, nil)
+	url += "/remote/sh_command"
+
+	sh, form_type, err := send_file_pre( "hello.sh" )
+
+	if err != nil {
+		fmt.Println( err )
+		os.Exit( 0 )
+	}
+
+	req, err := http.NewRequest( "Post", url, &sh )
 
 	if err != nil {
 		fmt.Println( "Error:http" )
 		fmt.Println( err )
-		return
+		os.Exit( 0 )
 	}
-	
-	req.Header.Set( "Hello", "Apple" )
 
-	client := new(http.Client)
-	resp, _ := client.Do(req)
+	req.Header.Set( "Content-Type", form_type )
+	req.Header.Set( "ID", "00001" )
+	
+	client := new( http.Client )
+	resp, err := client.Do( req )
 
 	if resp != nil {
 		defer resp.Body.Close()
+		var byteArray, _ = ioutil.ReadAll( resp.Body )
+		fmt.Println( string( byteArray ) )
+	} else {
+		fmt.Println( err )
 	}
-
-	byteArray, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println(string(byteArray))
 }
 
 func connect_url() string {
@@ -54,4 +67,33 @@ func connect_url() string {
 	url += data.IP
 
 	return url
+}
+
+func send_file_pre( file_name string ) ( bytes.Buffer, string, error ) {
+	var buf bytes.Buffer
+	w := multipart.NewWriter( &buf )
+
+	file, err := os.Open( file_name )
+
+	if err != nil {
+		return buf, "Error", err
+	}
+
+	defer file.Close()
+
+	fw, err := w.CreateFormFile( "sh_file", file_name )
+
+	if err != nil {
+		return buf, "Error", err
+	}
+
+	_, err = io.Copy( fw, file )
+
+	if err != nil {
+		return buf, "Error", err
+	}
+
+	w.Close()
+
+	return buf, w.FormDataContentType(), err
 }
