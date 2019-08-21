@@ -1,13 +1,15 @@
 package main
 
 import (
-	"os/exec"
+	//"os/exec"
+	"io/ioutil"
 	"fmt"
 )
 
 func main() {
-	var out, err = exec.Command( "sh", "hello.sh" ).Output()
+	dir := "./http_process/"
+	files, _ := ioutil.ReadDir( dir )
 
-	fmt.Println( err )
-	fmt.Println( string( out ) )
+	fmt.Println( len( files ) )
+
 }
