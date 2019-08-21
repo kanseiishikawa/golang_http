@@ -52,7 +52,7 @@ func main() {
 
 func connect_url() string {
 	var url = "http://"
-	raw, err := ioutil.ReadFile("./config.json")
+	raw, err := ioutil.ReadFile("../config.json")
 
 	if err != nil {
 		fmt.Println( "json_file read Error" )
