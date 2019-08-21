@@ -7,9 +7,13 @@ import (
 )
 
 func main() {
-	dir := "./http_process/"
+	dir := "./http_process"
 	files, _ := ioutil.ReadDir( dir )
 
-	fmt.Println( len( files ) )
+	for _, f := range files {
+		if ! f.IsDir() {
+			fmt.Println( f.Name() )
+		}
+	}
 
 }

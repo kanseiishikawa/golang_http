@@ -18,7 +18,7 @@ type json_data struct {
 func main() {
 
 	var url = connect_url()
-	url += "/target/first_connect"
+	url += "/target/search_sh"
 
 	req, err := http.NewRequest( "Get", url, nil )
 
@@ -28,8 +28,8 @@ func main() {
 		os.Exit( 0 )
 	}
 
-	req.Header.Set( "OS", "Mac" )
-	req.Header.Set( "user", "kansei" )
+	req.Header.Set( "ID", "1" )
+	//req.Header.Set( "user", "kansei" )
 	
 	client := new( http.Client )
 	resp, err := client.Do( req )

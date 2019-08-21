@@ -36,7 +36,7 @@ func main() {
 	}
 
 	req.Header.Set( "Content-Type", form_type )
-	req.Header.Set( "ID", "00001" )
+	req.Header.Set( "ID", "1" )
 	
 	client := new( http.Client )
 	resp, err := client.Do( req )
