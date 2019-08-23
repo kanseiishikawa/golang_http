@@ -13,7 +13,7 @@ type json_data struct {
 	IP string `json:"IP"`
 }
 
-var sc = bufio.NewScanner(os.Stdin)
+var sc = bufio.NewScanner( os.Stdin )
 
 func main() {
 	fmt.Println( "何を行いますか?" )
